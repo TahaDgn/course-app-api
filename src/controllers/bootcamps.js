@@ -8,7 +8,7 @@ exports.getBootcamps = (req,res,next) => {
 // @route GET /api/v1/bootcamps/:id
 // @access Public
 exports.getBootcamp = (req,res,next) => {
-    res.stat
+    
 }
 // @desc Create a new bootcamp
 // @route POST /api/v1/bootcamps/
