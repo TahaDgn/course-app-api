@@ -1,5 +1,5 @@
 const express = require('express');
-router = express.Router();
+const router = express.Router();
 
 router.get('/pong', (req, res) => {
     res.send({pong : 'pong'});
