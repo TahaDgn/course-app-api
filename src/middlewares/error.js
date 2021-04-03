@@ -7,11 +7,18 @@ const errorHandler = (err, req, res, next) => {
 
     error.message = err.message;
 
+    console.log([error]);
+
     // Mongoose bad object id
-    console.log(err.stack.red);
     if (err.name === 'CastError') {
         const message = `Bootcamp can not be found by id ${err.value}`;
         error = new ErrorResponse(message, 404);
+    }
+
+    //Mongoose validation error
+    if (err.name === 'ValidationError') {
+        const message = Object.values(err.errors).map(val => val.message);
+        error = new ErrorResponse(message, 400);
     }
 
     //Mongoose duplicate key
