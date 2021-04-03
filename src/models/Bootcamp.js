@@ -13,7 +13,7 @@ const BootcampSchema = new mongoose.Schema({
   slug: String, // lowercase-bootcamp-name
   description: {
     type: String,
-    required: [true, 'Please ada a description'],
+    required: [true, 'Please add a description'],
     unique: true,
     trim: true,
     maxlenght: [500, 'Desc can not be more than 50 characters'],
@@ -34,6 +34,7 @@ const BootcampSchema = new mongoose.Schema({
   },
   address: {
     type: String,
+    required: [true, 'Please add a adress'],
   },
   location: {
     // GeoJSON Point
@@ -105,7 +106,7 @@ BootcampSchema.pre('save', function (next) {
 
 // Geocode & Create location fields
 BootcampSchema.pre('save', async function (next) {
-  const loc = await geocoder.geocode(this.adress);
+  const loc = await geocoder.geocode(this.address);
   this.location = {
     type: 'Point',
     coordinates: [loc[0].longitude, loc[0].latitude],
@@ -117,8 +118,8 @@ BootcampSchema.pre('save', async function (next) {
     country: loc[0].countryCode,
   }
   // Do not save adress in DB
-  this.address = undefined;
+  this.address;
   next();
-})
+});
 
 module.exports = mongoose.model('Bootcamp', BootcampSchema);

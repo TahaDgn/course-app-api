@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
@@ -8,10 +9,12 @@ const { errorHandler } = require('./middlewares/error');
 const connectDB = require('./config/db');
 // Route files...
 const pong = require('./routes/pong');
+
+dotenv.config({path:path.join(__dirname, '../.env')}); // Bununla ilgili req sırası sorulacak...
+
 const bootcamps = require('./routes/bootcamps');
 
 // Load env vars...
-dotenv.config({path:"./src/config/config.env"});
 const app = express();
 
 // Body parser
