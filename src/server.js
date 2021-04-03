@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
 const { logger } = require('./middlewares/logger');
+const { errorHandler } = require('./middlewares/error');
 // Mongosee
 const connectDB = require('./config/db');
 // Route files...
@@ -25,6 +26,8 @@ connectDB();
 // Mouth routers
 app.use('/v1/bootcamps', pong);
 app.use('/v1/bootcamps', bootcamps);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
