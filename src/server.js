@@ -7,14 +7,13 @@ const { logger } = require('./middlewares/logger');
 const { errorHandler } = require('./middlewares/error');
 // Mongosee
 const connectDB = require('./config/db');
-// Route files...
-const pong = require('./routes/pong');
-
-dotenv.config({path:path.join(__dirname, '../.env')}); // Bununla ilgili req sırası sorulacak...
+// Load env vars...
+dotenv.config({ path: path.join(__dirname, '../.env') }); // Bununla ilgili req sırası sorulacak...
 
 const bootcamps = require('./routes/bootcamps');
+const courses = require('./routes/courses');
 
-// Load env vars...
+// Load express...
 const app = express();
 
 // Body parser
@@ -27,8 +26,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 connectDB();
 // Mouth routers
-app.use('/v1/bootcamps', pong);
 app.use('/v1/bootcamps', bootcamps);
+app.use('/v1/courses', courses)
 
 app.use(errorHandler);
 
@@ -39,7 +38,7 @@ const server = app.listen(PORT, () => {
 });
 
 //Handle unhandled promise rejections
-process.on('unhandledRejection' , (err , promise) => {
+process.on('unhandledRejection', (err, promise) => {
     console.log(`Error : ${err.message}`.red);
     server.close(() => {
         process.exit(1);
