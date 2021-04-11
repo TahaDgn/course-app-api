@@ -3,11 +3,13 @@ const ErrorResponse = require('../utils/errorResponse');
 /**@type {import('express').Errback} */
 const errorHandler = (err, req, res, next) => {
 
+    console.log('Hello oç');
+
     let error = { ...err };
 
     error.message = err.message;
 
-    console.log([error]);
+    console.log([error.name]);
 
     // Mongoose bad object id
     if (err.name === 'CastError') {

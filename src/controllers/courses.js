@@ -14,7 +14,7 @@ exports.getCourses = asyncHandler(async (req, res, next) => {
     if (req.params.bootcampId) {
         query = Course.find({ bootcamp: req.params.bootcampId });
     } else {
-        query = Course.find().select().populate({
+        query = Course.find().populate({
             path: 'bootcamp',
             select: 'name description',
         });
@@ -65,5 +65,6 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
         success: true,
         data: course,
     });
+
 });
 

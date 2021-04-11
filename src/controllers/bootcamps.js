@@ -13,7 +13,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
     const reqQuery = { ...req.query };
 
     // Fields to exclude
-    const removedFields = ['select', 'sort', 'limit', 'page'];
+    const removedFields = ['select', 'sort', 'limit', 'page']; // Selectin bura olması talha aydemir tarafından reddedildi.
 
     // Loopover removedFields and delete them from query
     removedFields.forEach(param => delete reqQuery[param]);
