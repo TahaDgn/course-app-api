@@ -43,9 +43,9 @@ const importData = async () => {
 const deleteData = async () => {
     try {
         await Bootcamp.deleteMany();
-        console.log('Bootcamps deleted...'.green.inverse);
+        console.log('Seeder -> Bootcamps deleted...'.yellow);
         await Course.deleteMany();
-        console.log('Courses deleted...'.green.inverse);
+        console.log('Seeder -> Courses deleted...'.yellow);
         process.exit();
     } catch (error) {
         console.log(`${error}`.red.inverse);
@@ -53,9 +53,9 @@ const deleteData = async () => {
 }
 
 
-if (process.argv[2] === '-seed') {
+if (process.argv[2] === '-s') {
     importData();
 }
-else if (process.argv[2] === '-delete') {
+else if (process.argv[2] === '-d') {
     deleteData();
 }

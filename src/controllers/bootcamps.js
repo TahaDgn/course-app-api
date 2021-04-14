@@ -157,3 +157,37 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
         data: bootcamps,
     })
 });
+
+// @desc Upload photo for bootcamp
+// @route PUT /v1/bootcamps/:id
+// @access Private
+exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
+    const bootcamp = await Bootcamp.findById(req.params.id);
+    if (!bootcamp) {
+        return next(new ErrorResponse(`Bootcamp that is called by id ${req.params.id} can not be found `, 404));
+    }
+
+    if (!req.files) {
+        return next(new ErrorResponse(`Please upload a file`, 400));
+    }
+
+    const file = req.files.file;
+
+    // Make sure the image is a photo
+    if (!file.mimetype.startsWith('image')) {
+        return next(new ErrorResponse(`Uncorrect type of uploaded file`, 400));
+    }
+    console.log('Mime type checked'.bgMagenta.inverse);
+
+    // Check file size
+    if (file.size > process.env.MAX_FILE_UPLOAD) {
+        return next(new ErrorResponse(`Please upload an image less than ${process.env.MAX_FILE_UPLOAD}`, 400));
+    }
+    console.log('File size checked'.bgMagenta.inverse);
+    // Create custom filename
+    file.name = `photo_${bootcamp._id}`;
+
+    console.log(file.name);
+
+    res.status(200).json({ fileName: file.name });
+});
