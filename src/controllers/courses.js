@@ -68,3 +68,34 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
 
 });
 
+// @desc Delete a new bootcamp
+// @route DELETE /v1/courses/:id
+// @access Private
+/** @type {import("express").RequestHandler} */
+exports.deleteCourse = asyncHandler(async (req, res, next) => {
+    const course = await Course.findById(req.params.id);
+    if (!course) {
+        return next(new ErrorResponse(`Bootcamp that is called by id ${req.params.id} can not be found `, 404));
+    }
+    await course.remove();
+
+    res.status(200).json({ success: true });
+})
+
+// @desc Update a bootcamp
+// @route PUT /v1/courses/:id
+// @access Private
+/** @type {import("express").RequestHandler} */
+exports.updateCourse = asyncHandler(async (req, res, next) => {
+    const course = await Course.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidatiors: true,
+    });
+
+    if (!course) {
+        return next(new ErrorResponse(`Course that is called by id ${req.params.id} can not be found`, 404));
+    }
+
+    res.status(200).json({ success: true, data: course });
+});
+
