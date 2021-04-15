@@ -1,3 +1,4 @@
+const path = require('path');
 const asyncHandler = require('../middlewares/async');
 const Bootcamp = require('../models/Bootcamp');
 const ErrorResponse = require('../utils/errorResponse');
@@ -185,9 +186,22 @@ exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
     }
     console.log('File size checked'.bgMagenta.inverse);
     // Create custom filename
-    file.name = `photo_${bootcamp._id}`;
+    file.name = `photo_${bootcamp._id}${path.parse(file.name).ext}`;
+    file.mv(`${path.join(__dirname, process.env.FILE_UPLOAD_PATH)}/${file.name}`, async err => {
 
-    console.log(file.name);
+        if (err) {
+            return next(new ErrorResponse(`Problem with file upload`, 500));
+        }
+        await Bootcamp.findByIdAndUpdate(req.params.id, { photo: file.name }, {
+            new: true,
+            runValidators: true,
+        });
 
-    res.status(200).json({ fileName: file.name });
+        res.status(200).json({
+            success: true,
+            data: bootcamp,
+        });
+
+        console.log('Photo Uploaded'.bgMagenta.inverse);
+    });
 });

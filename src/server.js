@@ -37,11 +37,14 @@ if (process.env.NODE_ENV === 'development') {
 connectDB();
 
 // File uploading
-app.use(fileUpload());
+app.use(fileUpload({ safeFileNames: true, preserveExtension: true }));
+
+// Static folder
+app.use(express.static(path.join(__dirname, './public/uploads')));
 
 // Mouth routers
 app.use('/v1/bootcamps', bootcamps);
-app.use('/v1/courses', courses)
+app.use('/v1/courses', courses);
 
 app.use(errorHandler);
 

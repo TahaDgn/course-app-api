@@ -80,7 +80,6 @@ typings/
 .env
 .env.test
 .env*.local
-src/config/config.env
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -128,6 +127,8 @@ dist/
 # Temporary folders
 tmp/
 temp/
+
+# Static public folder
 
 ### vscode ###
 .vscode/*
