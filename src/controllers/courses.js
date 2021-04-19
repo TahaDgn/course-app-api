@@ -10,12 +10,12 @@ const ErrorResponse = require("../utils/errorResponse");
 // @access Public
 exports.getCourses = asyncHandler(async (req, res, next) => {
 
-    const bootcamp = await Bootcamp.findById(req.params.bootcampId);
-    if (!bootcamp) {
-        return next(new ErrorResponse(`No bootcamp with the id of ${req.params.bootcampId}`, 404))
-    }
-
     if (req.params.bootcampId) {
+
+        const bootcamp = await Bootcamp.findById(req.params.bootcampId);
+        if (!bootcamp) {
+            return next(new ErrorResponse(`No bootcamp with the id of ${req.params.bootcampId}`, 404))
+        }
         const courses = await Course.find({ bootcamp: req.params.bootcampId });
 
         return res.status(200).json({

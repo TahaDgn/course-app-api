@@ -95,6 +95,7 @@ const BootcampSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+    index: true,
   }
 }, {
   toJSON: { virtuals: true },
