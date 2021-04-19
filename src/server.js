@@ -25,13 +25,13 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan(function (tokens, req, res) {
         return [
-            'Log'.yellow,
-            tokens.method(req, res).yellow,
-            tokens.url(req, res).yellow,
-            tokens.status(req, res).yellow,
-            tokens.res(req, res, 'content-length').yellow, '-'.yellow,
-            tokens['response-time'](req, res).yellow, 'MS'.yellow
-        ].join(' ').yellow
+            'Log'.magenta,
+            tokens.method(req, res).magenta,
+            tokens.url(req, res).magenta,
+            tokens.status(req, res).magenta,
+            tokens.res(req, res, 'content-length').magenta, '-'.magenta,
+            tokens['response-time'](req, res).magenta, 'MS'.magenta
+        ].join(' ').magenta
     }));
 }
 connectDB();

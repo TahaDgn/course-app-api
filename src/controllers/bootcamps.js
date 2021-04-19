@@ -9,73 +9,7 @@ const geocoder = require('../utils/geocoder');
 // @route GET /v1/bootcamps
 // @access Public
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
-
-    // Copy req.query
-    const reqQuery = { ...req.query };
-
-    // Fields to exclude
-    const removedFields = ['select', 'sort', 'limit', 'page']; // Selectin bura olması talha aydemir tarafından reddedildi.
-
-    // Loopover removedFields and delete them from query
-    removedFields.forEach(param => delete reqQuery[param]);
-
-    console.log(reqQuery);
-
-    // Create query string
-    let queryStr = JSON.stringify(reqQuery);
-
-    // Create operators ($gt , $gte etc...)
-    queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
-
-    // Finding resource
-    let query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
-
-    // Pagination fields
-
-    const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 100;
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const total = await Bootcamp.countDocuments();
-
-    query = query.skip(startIndex).limit(limit);
-
-    // Pagination results
-    const pagination = {};
-
-    if (endIndex < total) {
-        pagination.next = {
-            page: page + 1,
-            limit
-        }
-    }
-    if (startIndex > 0) {
-        pagination.prev = {
-            page: page - 1,
-            limit
-        }
-    }
-
-    // Select fields
-    if (req.query.select) {
-        const selectFields = req.query.select.split(',').join(' ');
-        console.log(`Select fields : ${selectFields}`);
-        query = query.select(selectFields);
-    }
-
-    // Sort fields
-    if (req.query.sort) {
-        const sortFields = req.query.sort.split(',').join(' ');
-        console.log(`Sort fields : ${sortFields}`);
-        query = query.sort(sortFields);
-    } else {
-        query = query.sort('name');
-    }
-
-    // Executing query
-    const bootcamps = await query;
-
-    res.status(200).json({ succes: true, count: bootcamps.length, pagination, data: bootcamps });
+    res.status(200).json(res.advancedResults);
 });
 
 // @desc Get single bootcamp

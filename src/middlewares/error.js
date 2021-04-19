@@ -3,6 +3,8 @@ const ErrorResponse = require('../utils/errorResponse');
 /**@type {import('express').Errback} */
 const errorHandler = (err, req, res, next) => {
 
+    console.log(`ErrorHandlerLog`.blue);
+
     let error = { ...err };
 
     error.message = err.message;
