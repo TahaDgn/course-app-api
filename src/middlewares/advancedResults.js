@@ -1,10 +1,5 @@
 exports.advancedResults = (model, populate) => async (req, res, next) => {
 
-    console.log({
-        path: 'advancedResults',
-        query: req.query,
-        request: req,
-    });
     // Copy req.query
     const reqQuery = { ...req.query };
 
@@ -24,25 +19,25 @@ exports.advancedResults = (model, populate) => async (req, res, next) => {
     let query = model.find(JSON.parse(queryStr));
 
     // Pagination fields
-
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 100;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const total = await model.countDocuments();
-
     query = query.skip(startIndex).limit(limit);
 
     // Pagination results
     const pagination = {};
 
     if (endIndex < total) {
+
         pagination.next = {
             page: page + 1,
             limit
         }
     }
     if (startIndex > 0) {
+
         pagination.prev = {
             page: page - 1,
             limit
@@ -50,20 +45,23 @@ exports.advancedResults = (model, populate) => async (req, res, next) => {
     }
 
     // Select fields
+
     if (req.query.select) {
         const selectFields = req.query.select.split(',').join(' ');
         query = query.select(selectFields);
     }
 
     // Sort fields
+
     if (req.query.sort) {
         const sortFields = req.query.sort.split(',').join(' ');
         query = query.sort(sortFields);
     } else {
-        query = query.sort('name');
+        query = query.sort('_id');
     }
 
     if (populate) {
+
         query = query.populate(populate);
     }
 

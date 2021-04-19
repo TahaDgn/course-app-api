@@ -18,8 +18,6 @@ const courseRouter = require('./courses');
 
 const router = express.Router();
 
-console.log(`BootcampRouterLog`.blue);
-
 // Re-route into other resource routhers
 router.use('/:bootcampId/courses', courseRouter)
 

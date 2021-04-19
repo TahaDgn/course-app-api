@@ -12,8 +12,6 @@ const { advancedResults } = require('../middlewares/advancedResults');
 
 const router = express.Router({ mergeParams: true, });
 
-console.log(`CourseRouterLog`.blue);
-
 router.route('/').get(advancedResults(Course, { path: 'bootcamp', select: 'name description' }), getCourses).post(createCourse);
 router.route('/:id').get(getCourse).delete(deleteCourse).put(updateCourse);
 
