@@ -13,7 +13,7 @@ dotenv.config({ path: path.join(__dirname, '../.env') }); // Bununla ilgili req 
 
 const bootcamps = require('./routes/bootcamps');
 const courses = require('./routes/courses');
-
+const auth = require('./routes/auth');
 // Load express...
 const app = express();
 
@@ -45,6 +45,7 @@ app.use(express.static(path.join(__dirname, './public/uploads')));
 // Mouth routers
 app.use('/v1/bootcamps', bootcamps);
 app.use('/v1/courses', courses);
+app.use('/v1/auth', auth);
 
 app.use(errorHandler);
 
