@@ -1,10 +1,10 @@
 const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
-const morgan = require('morgan');
 const colors = require('colors');
+const morgan = require('morgan');
 const fileUpload = require('express-fileupload');
-const { logger } = require('./middlewares/logger');
+const cookieParser = require('cookie-parser');
 const { errorHandler } = require('./middlewares/error');
 // Mongosee
 const connectDB = require('./config/db');
@@ -14,13 +14,18 @@ dotenv.config({ path: path.join(__dirname, '../.env') }); // Bununla ilgili req 
 const bootcamps = require('./routes/bootcamps');
 const courses = require('./routes/courses');
 const auth = require('./routes/auth');
+
 // Load express...
 const app = express();
 
 // Body parser
 app.use(express.json());
 
+// Cookie parser
+app.use(cookieParser());
+
 // app.use(logger);
+
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan(function (tokens, req, res) {
@@ -31,7 +36,7 @@ if (process.env.NODE_ENV === 'development') {
             tokens.status(req, res).magenta,
             tokens.res(req, res, 'content-length').magenta, '-'.magenta,
             tokens['response-time'](req, res).magenta, 'MS'.magenta
-        ].join(' ').magenta
+        ].join(' ')
     }));
 }
 connectDB();

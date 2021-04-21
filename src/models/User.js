@@ -53,9 +53,9 @@ UserSchema.methods.getSignedJwtToken = function () {
     })
 }
 
-// Encryp password before bcyrpt
-UserSchema.pre('save', async function (next) {
-    const salt = await bcyrpt.genSalt(25);
+// Encrypt password before bcyrpt
+UserSchema.pre('save', async function () {
+    const salt = await bcyrpt.genSalt(10);
     this.password = await bcyrpt.hash(this.password, salt);
     this.passwordSalt = salt;
 });
