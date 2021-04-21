@@ -4,7 +4,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const User = require('../models/User');
 
 // Protect routes
-exports.protect = asyncHandler(async (req, res, next) => {
+exports.jwtAuthentication = asyncHandler(async (req, res, next) => {
     let token;
     if (
         req.headers.authorization &&
@@ -32,7 +32,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
         next();
 
     } catch (error) {
-
+        return next(new ErrorResponse(`Not authorized to access this route`, 401));
     }
 
 

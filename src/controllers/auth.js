@@ -1,6 +1,7 @@
 const asyncHandler = require("../middlewares/async");
 const User = require("../models/User");
 const ErrorResponse = require("../utils/errorResponse");
+const jwt = require('jsonwebtoken');
 
 
 // @desc Register user
@@ -66,3 +67,15 @@ const sendTokenResponse = (user, statusCode, res) => {
         .cookie('token', token, options)
         .json({ success: true, token });
 }
+
+// @desc Get current logged user
+// @route POST /v1/auth/me
+// @access Private
+exports.me = asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.user.id);
+
+    res.status(200).json({
+        success: true,
+        data: user,
+    });
+})

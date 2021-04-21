@@ -17,19 +17,20 @@ const { advancedResults } = require('../middlewares/advancedResults');
 const courseRouter = require('./courses');
 
 const router = express.Router();
+const { jwtAuthentication } = require('../middlewares/auth');
 
 // Re-route into other resource routhers
 router.use('/:bootcampId/courses', courseRouter)
 
 router.route('/')
     .get(advancedResults(Bootcamp, 'courses'), getBootcamps)
-    .post(createBootcamp);
+    .post(jwtAuthentication, createBootcamp);
 router.route('/:id')
     .get(getBootcamp)
-    .put(updateBootcamp)
-    .delete(deleteBootcamp);
+    .put(jwtAuthentication, updateBootcamp)
+    .delete(jwtAuthentication, deleteBootcamp);
 router.route('/:id/photo')
-    .put(bootcampPhotoUpload);
+    .put(jwtAuthentication, bootcampPhotoUpload);
 router.route('/radius/:zipcode/:distance')
     .get(getBootcampsInRadius);
 
