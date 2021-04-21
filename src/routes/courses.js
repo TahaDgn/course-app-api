@@ -11,9 +11,15 @@ const Course = require('../models/Course');
 const { advancedResults } = require('../middlewares/advancedResults');
 
 const router = express.Router({ mergeParams: true, });
-const { jwtAuthentication } = require('../middlewares/auth');
+const { jwtAuthentication, authorize } = require('../middlewares/auth');
 
-router.route('/').get(advancedResults(Course, { path: 'bootcamp', select: 'name description' }), getCourses).post(jwtAuthentication, createCourse);
-router.route('/:id').get(getCourse).delete(jwtAuthentication, deleteCourse).put(jwtAuthentication, updateCourse);
+router.route('/')
+    .get(advancedResults(Course, { path: 'bootcamp', select: 'name description' }), getCourses)
+    .post(jwtAuthentication, authorize('publisher', 'admin'), createCourse);
+
+router.route('/:id')
+    .get(jwtAuthentication, authorize('user', 'publisher', 'admin'), getCourse)
+    .delete(jwtAuthentication, authorize('publisher', 'admin'), deleteCourse)
+    .put(jwtAuthentication, authorize('publisher', 'admin'), updateCourse);
 
 module.exports = router;
