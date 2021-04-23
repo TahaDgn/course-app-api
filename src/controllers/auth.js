@@ -22,7 +22,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-    })
+    });
 });
 
 // @desc Log in user
@@ -78,4 +78,25 @@ exports.me = asyncHandler(async (req, res, next) => {
         success: true,
         data: user,
     });
-})
+});
+
+// @desc Sends password reset token to an email
+// @route POST /v1/auth/forgotpassword
+// @access Private
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+        return next(new ErrorResponse(`There is no user`, 404));
+    }
+
+    // Get reset token
+    const resetToken = user.getResetPasswordToken();
+
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+        success: true,
+    });
+
+});
