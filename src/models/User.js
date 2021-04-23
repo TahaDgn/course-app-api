@@ -67,4 +67,11 @@ UserSchema.virtual('bootcamps', {
     foreignField: 'user',
     justOne: false,
 });
+
+UserSchema.virtual('courses', {
+    ref: 'Course',
+    localField: '_id',
+    foreignField: 'user',
+    justOne: false,
+});
 module.exports = mongoose.model('User', UserSchema);

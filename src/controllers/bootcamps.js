@@ -51,13 +51,21 @@ exports.createBootcamp = asyncHandler(async (req, res, next) => {
 // @route PUT /v1/bootcamps/:id
 // @access Private
 exports.updateBootcamp = asyncHandler(async (req, res, next) => {
-    const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidatiors: true
-    });
+    let bootcamp = await Bootcamp.findById(req.params.id);
     if (!bootcamp) {
         return next(new ErrorResponse(`Bootcamp that is called by id ${req.params.id} can not be found `, 404));
     }
+
+    // Make sure user is bootcamp owner
+    if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+        return next(new ErrorResponse(`User id ${req.user.id} is not owner of this`, 403));
+    }
+
+    bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidatiors: true
+    });
+
     res.status(200).json({ success: true, data: bootcamp });
 });
 
@@ -69,6 +77,12 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
     if (!bootcamp) {
         return next(new ErrorResponse(`Bootcamp that is called by id ${req.params.id} can not be found `, 404))
     }
+
+    // Make sure user is bootcamp owner
+    if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+        return next(new ErrorResponse(`User id ${req.user.id} is not owner of this`, 403));
+    }
+
     await bootcamp.remove();
     res.status(200).json({ success: true });
 });
@@ -112,6 +126,11 @@ exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
     const bootcamp = await Bootcamp.findById(req.params.id);
     if (!bootcamp) {
         return next(new ErrorResponse(`Bootcamp that is called by id ${req.params.id} can not be found `, 404));
+    }
+
+    // Make sure user is bootcamp owner
+    if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+        return next(new ErrorResponse(`User id ${req.user.id} is not owner of this`, 403));
     }
 
     if (!req.files) {
