@@ -24,7 +24,7 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Please add a password'],
-        minlength: 8,
+        minlength: 6,
         select: false,
     },
     passwordSalt: String,
@@ -60,5 +60,11 @@ UserSchema.pre('save', async function () {
     this.passwordSalt = salt;
 });
 
-
+// Reverse populate with virtuals
+UserSchema.virtual('bootcamps', {
+    ref: 'Bootcamp',
+    localField: '_id',
+    foreignField: 'user',
+    justOne: false,
+});
 module.exports = mongoose.model('User', UserSchema);
