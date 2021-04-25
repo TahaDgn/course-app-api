@@ -57,7 +57,7 @@ exports.advancedResults = (model, populate) => async (req, res, next) => {
         const sortFields = req.query.sort.split(',').join(' ');
         query = query.sort(sortFields);
     } else {
-        query = query.sort('createdAt');
+        query = query.sort('_id');
     }
 
     if (populate) {

@@ -46,9 +46,9 @@ const importData = async () => {
 const deleteData = async () => {
     try {
         await Course.deleteMany();
-        console.log('Seeder -> Courses deleted...'.yellow);
+        console.log('Seeder -> Courses deleted'.yellow);
         await Bootcamp.deleteMany();
-        console.log('Seeder -> Bootcamps deleted...'.yellow);
+        console.log('Seeder -> Bootcamps deleted'.yellow);
         await User.deleteMany();
         console.log('Seeder -> Users deleted'.yellow);
         process.exit();

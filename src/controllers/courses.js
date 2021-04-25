@@ -92,7 +92,7 @@ exports.deleteCourse = asyncHandler(async (req, res, next) => {
 
     await course.remove();
 
-    res.status(200).json({ success: true });
+    res.status(204).json({ success: true });
 })
 
 // @desc Update a bootcamp

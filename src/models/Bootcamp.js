@@ -133,10 +133,15 @@ BootcampSchema.pre('save', async function (next) {
 
 // Cascade delete courses when a bootcamp is deleted
 BootcampSchema.pre('remove', async function (next) {
-  console.log(`Courses removed from bootcamp ${this._id}`.bgBlue.inverse);
+
+  console.log('remove middleware girrdi');
+
   await this.model('Course').deleteMany({ bootcamp: this._id });
+  console.log('remove midden çıkıyor');
   next();
-})
+
+});
+
 
 // Reverse populate with virtuals
 BootcampSchema.virtual('courses', {

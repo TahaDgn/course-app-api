@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'publisher'],
+        enum: ['admin', 'user', 'publisher'],
         default: 'user',
     },
     password: {
@@ -28,9 +28,18 @@ const UserSchema = new mongoose.Schema({
         minlength: 6,
         select: false,
     },
-    passwordSalt: String,
-    resetPasswordToken: String,
-    resetPasswordExpire: Date,
+    passwordSalt: {
+        type: String,
+        select: false,
+    },
+    resetPasswordToken: {
+        type: String,
+        select: false,
+    },
+    resetPasswordExpire: {
+        type: Date,
+        select: false,
+    },
     createdAt: {
         type: Date,
         default: Date.now,
@@ -90,6 +99,15 @@ UserSchema.virtual('courses', {
     localField: '_id',
     foreignField: 'user',
     justOne: false,
+});
+
+// Cascade delete courses when a bootcamp is deleted
+UserSchema.pre('remove', async function (next) {
+
+    this.model('Bootcamp').find({ user: this._id })
+        .then(users => users.forEach(element => element.remove()));
+
+    next();
 });
 
 

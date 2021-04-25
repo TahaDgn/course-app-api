@@ -14,6 +14,7 @@ dotenv.config({ path: path.join(__dirname, '../.env') }); // Bununla ilgili req 
 const bootcamps = require('./routes/bootcamps');
 const courses = require('./routes/courses');
 const auth = require('./routes/auth');
+const admin = require('./routes/admin');
 
 // Load express...
 const app = express();
@@ -30,12 +31,12 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan(function (tokens, req, res) {
         return [
-            'Log'.magenta,
-            tokens.method(req, res).magenta,
-            tokens.url(req, res).magenta,
-            tokens.status(req, res).magenta,
-            tokens.res(req, res, 'content-length').magenta, '-'.magenta,
-            tokens['response-time'](req, res).magenta, 'MS'.magenta
+            'Log',
+            tokens.method(req, res),
+            tokens.url(req, res),
+            tokens.status(req, res),
+            tokens.res(req, res, 'content-length'), '-',
+            tokens['response-time'](req, res), 'MS'
         ].join(' ')
     }));
 }
@@ -51,6 +52,7 @@ app.use(express.static(path.join(__dirname, './public/uploads')));
 app.use('/v1/bootcamps', bootcamps);
 app.use('/v1/courses', courses);
 app.use('/v1/auth', auth);
+app.use('/v1/admin', admin);
 
 app.use(errorHandler);
 
