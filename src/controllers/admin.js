@@ -46,16 +46,20 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.updateUser = asyncHandler(async (req, res, next) => {
 
-    const user = await User.findById(req.params.id);
-    if (!user) {
-        return next(new ErrorResponse(`There is no user with id ${req.params.id}`, 404));
-    }
-    await user.update(req.body, {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true,
-    });
+    })
+    // const user = await User.findById(req.params.id);
+    // if (!user) {
+    //     return next(new ErrorResponse(`There is no user with id ${req.params.id}`, 404));
+    // }
+    // await user.updateOne(req.body, {
+    //     new: true,
+    //     runValidators: true,
+    // });
 
-    await user.save();
+    // await user.save();
 
     res.status(200).json({
         success: true,
@@ -63,6 +67,9 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     });
 });
 
+// @desc Delete a user
+// @route DELETE v1/admin/users/:id
+// @access Private
 exports.deleteUser = asyncHandler(async (req, res, next) => {
 
     const user = await User.findById(req.params.id);

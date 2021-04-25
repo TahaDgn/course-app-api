@@ -6,11 +6,14 @@ const User = require('../models/User');
 
 const router = express.Router();
 
+router.use(jwtAuthentication);
+router.use(authorize('admin'))
+
 router.route('/users/:id')
-    .get(jwtAuthentication, authorize('admin'), getUser)
-    .put(jwtAuthentication, authorize('admin'), updateUser)
-    .delete(jwtAuthentication, authorize('admin'), deleteUser);
+    .get(getUser)
+    .put(updateUser)
+    .delete(deleteUser);
 router.route('/users')
-    .get(jwtAuthentication, authorize('admin'), advancedResults(User), getUsers)
-    .post(jwtAuthentication, authorize('admin'), createUser);
+    .get(advancedResults(User), getUsers)
+    .post(createUser);
 module.exports = router;
