@@ -104,7 +104,7 @@ UserSchema.virtual('courses', {
 // Cascade delete courses when a bootcamp is deleted
 UserSchema.pre('remove', async function (next) {
 
-    this.model('Bootcamp').find({ user: this._id })
+    await this.model('Bootcamp').find({ user: this._id })
         .then(users => users.forEach(element => element.remove()));
 
     next();
