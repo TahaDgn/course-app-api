@@ -15,6 +15,7 @@ const bootcamps = require('./routes/bootcamps');
 const courses = require('./routes/courses');
 const auth = require('./routes/auth');
 const admin = require('./routes/admin');
+const reviews = require('./routes/reviews');
 
 // Load express...
 const app = express();
@@ -53,6 +54,7 @@ app.use('/v1/bootcamps', bootcamps);
 app.use('/v1/courses', courses);
 app.use('/v1/auth', auth);
 app.use('/v1/admin', admin);
+app.use('/v1/reviews', reviews)
 
 app.use(errorHandler);
 

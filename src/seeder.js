@@ -11,6 +11,7 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 const User = require('./models/User');
 const Bootcamp = require('./models/Bootcamp');
 const Course = require('./models/Course');
+const Review = require('./models/Review');
 // Connect to database
 
 mongoose.connect(process.env.MONGO_URI, {
@@ -25,6 +26,7 @@ mongoose.connect(process.env.MONGO_URI, {
 const users = JSON.parse(fs.readFileSync(`${__dirname}/_data/users.json`, 'utf-8'));
 const bootcamps = JSON.parse(fs.readFileSync(`${__dirname}/_data/bootcamps.json`, 'utf-8'));
 const courses = JSON.parse(fs.readFileSync(`${__dirname}/_data/courses.json`, 'utf-8'));
+const reviews = JSON.parse(fs.readFileSync(`${__dirname}/_data/reviews.json`, 'utf-8'));
 
 // Import into db
 const importData = async () => {
@@ -35,6 +37,8 @@ const importData = async () => {
         console.log('Bootcamps Imported...'.green.inverse);
         await Course.create(courses);
         console.log('Courses Imported...'.green.inverse);
+        await Review.create(reviews);
+        console.log('Reviews Imported'.green.inverse);
         process.exit();
     } catch (error) {
         console.log(`${error}`.red.inverse);
@@ -45,6 +49,8 @@ const importData = async () => {
 
 const deleteData = async () => {
     try {
+        await Review.deleteMany();
+        console.log(`Seeder -> Reviews deleted`.yellow);
         await Course.deleteMany();
         console.log('Seeder -> Courses deleted'.yellow);
         await Bootcamp.deleteMany();

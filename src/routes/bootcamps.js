@@ -15,12 +15,14 @@ const { advancedResults } = require('../middlewares/advancedResults');
 
 // Include other resource routers
 const courseRouter = require('./courses');
+const reviewRouter = require('./reviews');
 
 const router = express.Router();
 const { jwtAuthentication, authorize } = require('../middlewares/auth');
 
 // Re-route into other resource routhers
 router.use('/:bootcampId/courses', courseRouter)
+router.use('/:bootcampId/reviews', reviewRouter);
 
 router.route('/')
     .get(advancedResults(Bootcamp, 'courses'), getBootcamps)
