@@ -19,10 +19,11 @@ const reviewRouter = require('./reviews');
 
 const router = express.Router();
 const { jwtAuthentication, authorize } = require('../middlewares/auth');
+const Review = require('../models/Review');
 
 // Re-route into other resource routhers
 router.use('/:bootcampId/courses', courseRouter)
-router.use('/:bootcampId/reviews', reviewRouter);
+router.use('/:bootcampId/reviews', advancedResults(Review), reviewRouter);
 
 router.route('/')
     .get(advancedResults(Bootcamp, 'courses'), getBootcamps)

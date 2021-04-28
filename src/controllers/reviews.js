@@ -9,19 +9,27 @@ const ErrorResponse = require('../utils/errorResponse');
 // @Access Public
 exports.getReviews = asyncHandler(async (req, res, next) => {
 
-    const bootcamp = await Bootcamp.findById(req.params.bootcampId);
+    if (!req.params.bootcampId) {
+        res.status(200).json(res.advancedResults);
+    }
+    else {
+        const bootcamp = await Bootcamp.findById(req.params.bootcampId);
 
-    if (!bootcamp) {
-        return next(new ErrorResponse(`There is no bootcamp with id ${req.params.bootcampId}`, 400));
+        if (!bootcamp) {
+            return next(new ErrorResponse(`There is no bootcamp with id ${req.params.bootcampId}`, 400));
+        }
+
+        res.status(200).json(res.advancedResults);
     }
 
-    const reviews = await Review.find({ bootcamp: req.params.bootcampId });
 
-    res.status(200).json({
-        success: true,
-        count: reviews.length,
-        data: reviews,
-    });
+    // const reviews = await Review.find({ bootcamp: req.params.bootcampId });
+
+    // res.status(200).json({
+    //     success: true,
+    //     count: reviews.length,
+    //     data: reviews,
+    // });
 });
 
 exports.getReview = asyncHandler(async (req, res, next) => {
