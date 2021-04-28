@@ -101,6 +101,13 @@ UserSchema.virtual('courses', {
     justOne: false,
 });
 
+UserSchema.virtual('reviews', {
+    ref: 'Review',
+    localField: '_id',
+    foreignField: 'user',
+    justOne: false
+})
+
 // Cascade delete courses when a bootcamp is deleted
 UserSchema.pre('remove', async function (next) {
 

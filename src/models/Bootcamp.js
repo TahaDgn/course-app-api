@@ -134,10 +134,9 @@ BootcampSchema.pre('save', async function (next) {
 // Cascade delete courses when a bootcamp is deleted
 BootcampSchema.pre('remove', async function () {
 
-  console.log('remove middleware girrdi');
   await this.model('Course').deleteMany({ bootcamp: this._id });
   await this.model('Review').deleteMany({ bootcamp: this._id });
-  console.log('remove midden çıkıyor');
+
 
 });
 
@@ -149,5 +148,12 @@ BootcampSchema.virtual('courses', {
   foreignField: 'bootcamp',
   justOne: false,
 });
+
+BootcampSchema.virtual('reviews', {
+  ref: 'Review',
+  localField: '_id',
+  foreignField: 'bootcamp',
+  justOne: false,
+})
 
 module.exports = mongoose.model('Bootcamp', BootcampSchema);
