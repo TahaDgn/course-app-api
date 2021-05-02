@@ -12,8 +12,10 @@ exports.jwtAuthentication = asyncHandler(async (req, res, next) => {
         req.headers.authorization &&
         req.headers.authorization.startsWith('Bearer')
     ) {
+        // Set token from Bearrer token in header
         token = req.headers.authorization.split(' ')[1];
     }
+    // Set token from cookie
     else if (req.cookies.token) {
         token = req.cookies.token;
     }

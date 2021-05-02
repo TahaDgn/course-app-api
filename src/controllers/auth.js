@@ -73,10 +73,27 @@ const sendTokenResponse = (user, statusCode, res) => {
 exports.me = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.user.id);
 
+    if (!user) {
+        return next(new ErrorResponse(`There is no user with id ${req.user.id}`));
+    }
+
     res.status(200).json({
         success: true,
         data: user,
     });
+});
+
+// @desc Log user out / clear cookie
+// @route POST /v1/auth/logout
+// @access Private
+exports.logout = asyncHandler(async (req, res, next) => {
+
+    res.cookie('token', 'none', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true,
+    })
+
+    res.status(200).json({ success: true });
 });
 
 // @desc Sends password reset token to an email

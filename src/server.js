@@ -5,6 +5,11 @@ const colors = require('colors');
 const morgan = require('morgan');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
+const expressMongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const xssClean = require('xss-clean');
+const expressRateLimit = require('express-rate-limit');
+const cors = require('cors');
 const { errorHandler } = require('./middlewares/error');
 // Mongosee
 const connectDB = require('./config/db');
@@ -16,6 +21,7 @@ const courses = require('./routes/courses');
 const auth = require('./routes/auth');
 const admin = require('./routes/admin');
 const reviews = require('./routes/reviews');
+const hpp = require('hpp');
 
 // Load express...
 const app = express();
@@ -46,8 +52,41 @@ connectDB();
 // File uploading
 app.use(fileUpload({ safeFileNames: true, preserveExtension: true }));
 
+// Sanitize data
+app.use(expressMongoSanitize());
+
+// Set security headers
+app.use(helmet());
+
+// Set xss protector
+app.use(xssClean());
+
 // Static folder
 app.use(express.static(path.join(__dirname, './public/uploads')));
+
+// Rate limitter
+app.use(expressRateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 25,
+    message: 'Too many requests within a short time. Please try again later',
+}));
+
+// Prevent hpp param pollution
+app.use(hpp());
+
+// Enable cors
+
+const whilelist = process.env.CORS_WHITELIST.split(' ');
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not Allowed by CORS'))
+        }
+    }
+}))
 
 // Mouth routers
 app.use('/v1/bootcamps', bootcamps);
